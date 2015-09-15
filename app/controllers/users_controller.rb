@@ -8,9 +8,7 @@ class UsersController < ApplicationController
     if @user.save!
       render json: @user
     else
-      render(
-      json: @user.errors.full_messages, status: :unprocessable_entity
-      )
+      render json: @user.errors.full_messages, status: :unprocessable_entity
     end
   end
 
@@ -29,21 +27,25 @@ class UsersController < ApplicationController
     if @user.update(user_params)
       render json: @user
     else
-      render text: 'not updated', status: :unprocessable_entity
+      render json: @user.errors.full_messages, status: :unprocessable_entity
     end
   end
 
   def destroy
     @user = User.find(params[:id])
     if @user.destroy
-      render json: User.all
+      render json: @user
     else
       render text: 'not destroyed', status: :unprocessable_entity
     end
   end
 
+  def favorite
+    render json: User.favorite
+  end
+
   private
   def user_params
-    params.require(:user).permit(:name, :email)
+    params.require(:user).permit(:username)
   end
 end
